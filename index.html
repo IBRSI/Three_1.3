@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js с Troika Text</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/troika-three-text/dist/three-text.umd.js"></script>
+    <script>
+        // Создание сцены, камеры и рендерера
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Добавление света
+        const light = new THREE.AmbientLight(0xffffff, 1);
+        scene.add(light);
+
+        // Создание текста с использованием Troika
+        const text = new TroikaThreeText.Text();
+        text.text = 'Привет, Three.js!';
+        text.fontSize = 1;
+        text.color = 'white';
+        text.position.set(-3, 0, -5);
+        text.sync(); // Синхронизация текста
+        scene.add(text);
+
+        // Установка позиции камеры
+        camera.position.z = 5;
+
+        // Анимация
+        function animate() {
+            requestAnimationFrame(animate);
+            text.rotation.y += 0.01; // Вращение текста
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Обработка изменения размера окна
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
